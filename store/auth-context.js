@@ -1,4 +1,5 @@
 import {createContext, useState} from "react";
+import {useNavigation} from "@react-navigation/native";
 
 
 export const AuthContext = createContext({
@@ -9,11 +10,9 @@ export const AuthContext = createContext({
 });
 
 function AuthContextProvider({children}) {
-    const [authToken, setAuthToken] = useState();
-
+    const [authToken, setAuthToken] = useState(null);
     function authenticate(token) {
         setAuthToken(token);
-        alert(token);
     }
 
     function logout() {

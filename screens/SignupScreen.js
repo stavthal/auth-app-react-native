@@ -10,27 +10,27 @@ import {useAuthContext} from "../hooks/useAuthContext";
 
 function SignupScreen() {
   const [isAuthenticating, setIsAuthenticating] = React.useState(false);
-  const { authenticate } = useAuthContext();
+  const { authenticate, isAuthenticated } = useAuthContext();
   const signupHandler = async ({email, password}) => {
     setIsAuthenticating(true);
     try {
       const token = await createUser(email, password);
       authenticate(token);
-
     } catch (err) {
       Alert.alert(
           "Authentication failed!",
           "Could not create user. Please check your credentials or try again later."
       );
+      setIsAuthenticating(false); // stops the loader from being visible
     }
-    setIsAuthenticating(false);
   }
 
-  return (
-      isAuthenticating ?
-          <LoadingOverlay message={"Creating user..."}/> :
-          <AuthContent onAuthenticate={signupHandler}/>
-  );
+  if (isAuthenticating)
+  {
+    return <LoadingOverlay message={"Creating user..."}/>
+  }
+
+  return <AuthContent onAuthenticate={signupHandler}/>;
 }
 
 export default SignupScreen;
