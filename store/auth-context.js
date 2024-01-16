@@ -1,6 +1,4 @@
 import {createContext, useState} from "react";
-import {useNavigation} from "@react-navigation/native";
-
 
 export const AuthContext = createContext({
     token: '',
