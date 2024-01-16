@@ -75,8 +75,11 @@ const Root = () => {
     }, []);
 
     if (!isTryingLogin) {
-        // noinspection JSIgnoredPromiseFromCall
-        SplashScreen.hideAsync();
+        setTimeout(() => {
+            // noinspection JSIgnoredPromiseFromCall
+            SplashScreen.hideAsync(); // hiding the splash screen after N seconds
+        }, 1200)
+
     }
 
     return <Navigation />;
