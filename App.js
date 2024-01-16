@@ -9,6 +9,7 @@ import { Colors } from './constants/styles';
 import AuthContextProvider from "./store/auth-context";
 import {useAuthContext} from "./hooks/useAuthContext";
 import {useEffect} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
@@ -51,12 +52,31 @@ function Navigation() {
     );
 }
 
+const Root = () => {
+    const { authenticate, isAuthenticated } = useAuthContext();
+    const fetchToken = async () => {
+        const storedToken = await AsyncStorage.getItem('token');
+
+        if (storedToken) {
+            authenticate(storedToken);
+        }
+    }
+
+    useEffect(() => {
+        fetchToken();
+    }, []);
+
+    return <Navigation />;
+
+}
+
 export default function App() {
+
   return (
     <>
       <StatusBar style="light" />
         <AuthContextProvider>
-            <Navigation />
+            <Root />
         </AuthContextProvider>
     </>
   );
