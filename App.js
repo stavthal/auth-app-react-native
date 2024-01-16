@@ -8,10 +8,15 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import { Colors } from './constants/styles';
 import AuthContextProvider from "./store/auth-context";
 import {useAuthContext} from "./hooks/useAuthContext";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SplashScreen from 'expo-splash-screen';
 
 const Stack = createNativeStackNavigator();
+
+
+// noinspection JSIgnoredPromiseFromCall
+SplashScreen.preventAutoHideAsync(); // Prevents auto-hide of the splash screen
 
 function AuthStack() {
   return (
@@ -53,25 +58,32 @@ function Navigation() {
 }
 
 const Root = () => {
-    const { authenticate, isAuthenticated } = useAuthContext();
+    const [isTryingLogin, setIsTryingLogin] = useState(true);
+    const { authenticate } = useAuthContext();
     const fetchToken = async () => {
         const storedToken = await AsyncStorage.getItem('token');
 
         if (storedToken) {
             authenticate(storedToken);
         }
+
+        setIsTryingLogin(false);
     }
 
     useEffect(() => {
         fetchToken();
     }, []);
 
+    if (!isTryingLogin) {
+        // noinspection JSIgnoredPromiseFromCall
+        SplashScreen.hideAsync();
+    }
+
     return <Navigation />;
 
 }
 
 export default function App() {
-
   return (
     <>
       <StatusBar style="light" />

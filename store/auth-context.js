@@ -1,4 +1,5 @@
-import {createContext, useEffect, useState} from "react";
+import {createContext, useState} from "react";
+import { useStorage } from "../hooks/useStorage";
 
 export const AuthContext = createContext({
     token: '',
@@ -14,7 +15,15 @@ function AuthContextProvider({children}) {
     }
 
     function logout() {
-        setAuthToken(null);
+        const { removeData } = useStorage();
+
+        removeData('token')
+            .then(() => {
+                setAuthToken(null);
+            })
+            .catch(err => {
+                console.error(err.message);
+            });
     }
 
     const value = {

@@ -21,7 +21,7 @@ const getData = async (value) => {
 
 const removeData = async (value) => {
     try {
-        await AsyncStorage.removeItem(value);
+       await AsyncStorage.removeItem(value);
     } catch (error) {
         console.error(error.message);
     }
